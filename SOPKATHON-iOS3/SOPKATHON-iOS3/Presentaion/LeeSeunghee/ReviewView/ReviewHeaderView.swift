@@ -30,7 +30,7 @@ final class ReviewHeaderView: BaseUIView {
     
     override func setStyle() {
         headerLabel.do {
-            $0.text = "내 실수!"
+            $0.text = "대단해 카드"
             $0.font = .title_sb_16
             $0.textColor = .black
         }
