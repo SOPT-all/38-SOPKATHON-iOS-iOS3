@@ -12,6 +12,8 @@
 		<string>Pretendard-SemiBold.ttf</string>
 		<string>Pretendard-Regular.ttf</string>
 		<string>Pretendard-Light.ttf</string>
+		<string>Pretendard-Bold.ttf</string>
+		<string>DXMSubtitlesM-KSCpc-EUC-H.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
