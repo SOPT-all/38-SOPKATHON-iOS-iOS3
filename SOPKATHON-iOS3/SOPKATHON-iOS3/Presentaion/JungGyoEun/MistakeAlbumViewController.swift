@@ -86,7 +86,7 @@ class MistakeAlbumViewController: BaseUIViewController {
         subHeaderLabel.do {
             $0.text = "과거에 기록했던 아이쿠 순간을 눌러서, 회고의 시간을 가져봐요!"
             $0.font = .caption_r_10
-            $0.textColor = .gray
+            $0.textColor = .gray600
         }
         
         collectionView.do {
