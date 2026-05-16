@@ -16,6 +16,8 @@ final class MainViewController: BaseUIViewController {
     
     private let mainView = MainView()
     
+    private var serverHomeData: HomeData?
+    
     // MARK: - Life Cycle
     
     override func loadView() {
@@ -24,23 +26,56 @@ final class MainViewController: BaseUIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchHomeData()
     }
+    
     override func setDelegate() {
         mainView.collectionView.dataSource = self
         mainView.firstCardButton.addTarget(self, action: #selector(firstCardButtonDidTap), for: .touchUpInside)
         mainView.secondCardButton.addTarget(self, action: #selector(secondCardButtonDidTap), for: .touchUpInside)
     }
     
+    // MARK: - Network Connection
+    
+    private func fetchHomeData() {
+        MistakeService.shared.getHomeData(userId: 1) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let data):
+                guard let homeData = data as? HomeData else { return }
+                self.serverHomeData = homeData
+                
+                self.bindServerData(homeData)
+                
+            case .requestErr(let message):
+                print("⚠️ 요청 오류: \(message)")
+            case .pathErr:
+                print("⚠️ 디코딩 에러 발생")
+            case .serverErr:
+                print("⚠️ 서버 내부 오류")
+            case .networkFail:
+                print("⚠️ 네트워크 연결 상태 확인 요망")
+            }
+        }
+    }
+    
+    private func bindServerData(_ data: HomeData) {
+        mainView.welcomeLabel.text = "안녕하세요, \(data.user.name)님!"
+        mainView.serialView.configure(count: data.user.streakCount)
+        mainView.collectionView.reloadData()
+    }
+    
+    // MARK: - Action Methods
+    
     @objc private func firstCardButtonDidTap() {
         let nextVC = WriteMistakeViewController()
-        
         nextVC.modalPresentationStyle = .overFullScreen
-        
         self.present(nextVC, animated: false, completion: nil)
     }
     
     @objc private func secondCardButtonDidTap() {
-        // 두 번째 버튼 눌렸을 때 로직 구현
+        // 두 번째 버튼 액션 처리
     }
 }
 
@@ -65,6 +100,10 @@ extension MainViewController: UICollectionViewDataSource {
                 withReuseIdentifier: MainHeaderCollectionView.identifier,
                 for: indexPath
             ) as? MainHeaderCollectionView else { return UICollectionReusableView() }
+            
+            if let dates = serverHomeData?.dates {
+                headerView.updateData(with: dates)
+            }
             
             return headerView
         }
