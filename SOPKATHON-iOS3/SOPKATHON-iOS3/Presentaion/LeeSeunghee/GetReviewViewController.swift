@@ -13,7 +13,7 @@ import Then
 class GetReviewViewController: BaseUIViewController {
     
     private let userId = 1
-    private let mistakeId = 1
+    private let mistakeId: Int
     
     private let reviewHeader = ReviewHeaderView()
     
@@ -28,6 +28,15 @@ class GetReviewViewController: BaseUIViewController {
         isEditable: false,
         reviewText: nil
     )
+    
+    init(mistakeId: Int) {
+        self.mistakeId = mistakeId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,11 +75,6 @@ class GetReviewViewController: BaseUIViewController {
     override func setDelegate() {
         // ReviewHeaderView 안의 backButton이 눌렸을 때 GetReviewViewController가 이벤트를 받도록 연결한다.
         reviewHeader.delegate = self
-    }
-    
-    func pushToViewController() {
-        let vc = ViewController()
-        navigationController?.pushViewController(vc, animated: true)
     }
     
     func configureReviewText(_ text: String) {
@@ -121,6 +125,6 @@ class GetReviewViewController: BaseUIViewController {
 extension GetReviewViewController: ReviewHeaderViewDelegate {
     func reviewHeaderViewDidTapBackButton(_ headerView: ReviewHeaderView) {
         // HeaderView에서 전달받은 버튼 탭 이벤트를 실제 화면 이동으로 바꿔준다.
-        pushToViewController()
+        navigationController?.popViewController(animated: true)
     }
 }

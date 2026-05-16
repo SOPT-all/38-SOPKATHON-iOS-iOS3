@@ -193,6 +193,18 @@ extension MistakeAlbumViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         fetchNextPageIfNeeded(currentIndex: indexPath.item)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = itemList[indexPath.item]
+        
+        if item.hasReflection {
+            let nextVC = GetReviewViewController(mistakeId: item.mistakeId)
+            navigationController?.pushViewController(nextVC, animated: true)
+        } else {
+            let nextVC = PostReviewViewController(mistakeId: item.mistakeId)
+            navigationController?.pushViewController(nextVC, animated: true)
+        }
+    }
 }
 
 extension MistakeAlbumViewController: UICollectionViewDataSource {
