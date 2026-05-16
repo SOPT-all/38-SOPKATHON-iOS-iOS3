@@ -12,6 +12,7 @@ enum CustomButtonType: CaseIterable {
     case onboarding
     case cancel
     case write
+    case post
 }
 
 extension CustomButtonType {
@@ -21,6 +22,7 @@ extension CustomButtonType {
         case .onboarding: "나의 아이쿠 기록 작성하기"
         case .cancel: "취소"
         case .write: "작성하기"
+        case .post: "작성하기"
         }
     }
     
@@ -30,6 +32,7 @@ extension CustomButtonType {
         case .onboarding: 355
         case .cancel: 160
         case .write: 160
+        case .post: 355
         }
     }
     
@@ -39,6 +42,7 @@ extension CustomButtonType {
         case .onboarding: 44
         case .cancel: 44
         case .write: 44
+        case .post: 44
         }
     }
     
@@ -48,6 +52,7 @@ extension CustomButtonType {
         case .onboarding: .white
         case .cancel: . gray
         case .write: .white
+        case .post: .white
         }
     }
     
@@ -57,6 +62,7 @@ extension CustomButtonType {
         case .onboarding: .gray
         case .cancel: .lightGray
         case .write: .black
+        case .post: .black
         }
     }
 }
