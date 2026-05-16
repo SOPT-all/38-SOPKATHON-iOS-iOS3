@@ -8,6 +8,8 @@
 import UIKit
 
 extension UIFont {
+    static let heading_b_16 = UIFont(name: "Pretendard-Bold", size: 16) ?? .systemFont(ofSize: 16, weight: .bold)
+    
     static let heading_sb_22 = UIFont(name: "Pretendard-SemiBold", size: 22) ?? .systemFont(ofSize: 22, weight: .semibold)
     static let heading_sb_20 = UIFont(name: "Pretendard-SemiBold", size: 20) ?? .systemFont(ofSize: 20, weight: .semibold)
     
@@ -17,8 +19,11 @@ extension UIFont {
 
     static let body_m_14 = UIFont(name: "Pretendard-Medium", size: 14) ?? .systemFont(ofSize: 14, weight: .medium)
     static let body_m_12 = UIFont(name: "Pretendard-Medium", size: 12) ?? .systemFont(ofSize: 12, weight: .medium)
+    static let body_r_18 = UIFont(name: "Pretendard-Regular", size: 18) ?? .systemFont(ofSize: 18, weight: .regular)
     static let body_r_12 = UIFont(name: "Pretendard-Regular", size: 12) ?? .systemFont(ofSize: 12, weight: .regular)
     
     static let caption_r_10 = UIFont(name: "Pretendard-Regular", size: 10) ?? .systemFont(ofSize: 10, weight: .regular)
     static let caption_l_10 = UIFont(name: "Pretendard-Light", size: 10) ?? .systemFont(ofSize: 10, weight: .light)
+    
+    static let movie_13 = UIFont(name: "DXMSubtitlesM-KSCpc-EUC-H", size: 13) ?? .systemFont(ofSize: 13, weight: .regular)
 }
