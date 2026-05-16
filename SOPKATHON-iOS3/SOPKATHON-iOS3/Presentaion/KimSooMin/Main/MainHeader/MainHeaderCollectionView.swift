@@ -14,10 +14,7 @@ final class MainHeaderCollectionView: UICollectionReusableView {
     
     static let identifier = "MainHeaderCollectionView"
     
-    private var dummyData: [(day: String, date: String)] = [
-        ("목", "5 / 14"), ("금", "5 / 15"), ("토", "5 / 16"),
-        ("일", "5 / 17"), ("월", "5 / 18"), ("화", "5 / 19"), ("수", "5 / 20")
-    ]
+    private var dateList: [DateStrip] = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout().then {
@@ -64,12 +61,17 @@ final class MainHeaderCollectionView: UICollectionReusableView {
             forCellWithReuseIdentifier: MainHeaderCell.identifier
         )
     }
+    
+    func updateData(with dates: [DateStrip]) {
+        self.dateList = dates
+        self.collectionView.reloadData()
+    }
 }
 
 extension MainHeaderCollectionView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dummyData.count
+        return dateList.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -78,8 +80,10 @@ extension MainHeaderCollectionView: UICollectionViewDataSource, UICollectionView
             for: indexPath
         ) as? MainHeaderCell else { return UICollectionViewCell() }
         
-        let data = dummyData[indexPath.item]
-        cell.bindData(day: data.day, date: data.date)
+        let data = dateList[indexPath.item]
+        
+        cell.bindData(day: data.dayOfWeek, date: data.formattedDate)
+        
         return cell
     }
     

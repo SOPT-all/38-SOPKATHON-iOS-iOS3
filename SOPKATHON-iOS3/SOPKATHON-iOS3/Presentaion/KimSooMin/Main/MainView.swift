@@ -14,10 +14,10 @@ final class MainView: BaseUIView {
     
     // MARK: - UI Components
     
-    private let welcomeLabel = UILabel()
-    private let subLabel = UILabel()
+    let welcomeLabel = UILabel()
+    let subLabel = UILabel()
     
-    private let serialView = SerialView()
+    let serialView = SerialView()
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     
