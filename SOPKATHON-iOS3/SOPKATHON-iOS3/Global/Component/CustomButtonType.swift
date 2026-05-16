@@ -46,7 +46,7 @@ extension CustomButtonType {
         switch self {
         case .example: .black
         case .onboarding: .white
-        case .cancel: . gray
+        case .cancel: . gray600
         case .write: .white
         }
     }
@@ -55,8 +55,8 @@ extension CustomButtonType {
         switch self {
         case .example: .blue
         case .onboarding: .gray
-        case .cancel: .lightGray
-        case .write: .black
+        case .cancel: .gray200
+        case .write: .gray900
         }
     }
 }
