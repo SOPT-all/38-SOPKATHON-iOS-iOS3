@@ -1,7 +1,8 @@
 # 38-SOPKATHON-iOS-iOS3
 ** 솝커톤 iOS 3팀 iOS repository **
 
-## Project 
+## Project
+
 - 서비스명 : 아이쿠
 - 개발기간 : **2026.05.16 23:00 - 2026.05.17 09:00**
 
@@ -11,7 +12,7 @@
 
 ## iOS Developers 👩🏻‍💻
 
-| <img src="" width="200" alt="팀원 프로필 이미지 1"> | <img src="" width="200" alt="팀원 프로필 이미지 2"> | <img src="" width="200" alt="팀원 프로필 이미지 3"> |
+| <img src="https://github.com/user-attachments/assets/a0222a32-3fe9-426b-b5e7-181937be847e" width="100" alt="팀원 프로필 이미지 1"> | <img src="https://github.com/user-attachments/assets/71b7cbc8-bda8-4de3-92a2-f310f4704087" width="100" alt="팀원 프로필 이미지 2"> | <img src="https://github.com/user-attachments/assets/2e8b6ce0-de09-4e69-8bc8-63c5436e9edf" width="100" alt="팀원 프로필 이미지 3"> |
 | :---: | :---: | :---: |
 | **김수민** | **이승희** | **정교은** |
 | `홈` `실수 작성`| `온보딩` `회고 작성` | `실수 앨범` |
@@ -68,19 +69,46 @@ Kingfisher : 이미지 URL 로딩, 캐싱, 비동기 처리를 간편하게 구�
 ```
 
 ## Branch Strategy 🪾
-<img src="" width="600" alt="">
 모든 개발은 `develop` 브랜치를 중심으로 진행됩니다.
 - Default Branch: `develop`
 - PR Target: `develop`
 
 ## Foldering 📁
 
+```text
+SOPKATHON-iOS3
+├── Application
+│   ├── AppDelegate.swift
+│   ├── SceneDelegate.swift
+│   └── Info.plist
+├── Global
+│   ├── Base
+│   ├── Component
+│   ├── Extension
+│   └── Resource
+├── Network
+│   ├── API
+│   ├── Base
+│   ├── DTO
+│   └── Service
+└── Presentation
+    ├── Home
+    │   ├── Main
+    │   └── WriteMistake
+    ├── MistakeAlbum
+    └── Review
+        ├── Onboarding
+        ├── GetReview
+        ├── PostReview
+        └── ReviewView
+```
+
 ## 시연 영상 📼
 <img src="" width="300" alt="">
 
 ## Photos 🤳🏿
 
-| <img src="https://github.com/user-attachments/assets/d5c93615-7c50-494f-b596-339fb0efc509" width="300" alt="솝커톤 전"> | <img src="" width="230" alt="솝커톤 후"> | 
+| <img src="https://github.com/user-attachments/assets/d5c93615-7c50-494f-b596-339fb0efc509" width="300" alt="솝커톤 전"> | <img src="https://github.com/user-attachments/assets/290106dd-7033-45bb-afa4-5f4d369791d1" width="230" alt="솝커톤 후"> | 
 | :---: | :---: | 
-| <img src="https://github.com/user-attachments/assets/1b2f645a-b1dc-475a-b976-6a3d9b93203a" width="300" alt="솝커톤 전"> | <img src="" width="230" alt="솝커톤 후"> | 
+| <img src="https://github.com/user-attachments/assets/1b2f645a-b1dc-475a-b976-6a3d9b93203a" width="300" alt="솝커톤 전"> | <img src="https://github.com/user-attachments/assets/290106dd-7033-45bb-afa4-5f4d369791d1" width="230" alt="솝커톤 후"> | 
 | **Before SOPKATHON** | **After SOPKATHON** |
