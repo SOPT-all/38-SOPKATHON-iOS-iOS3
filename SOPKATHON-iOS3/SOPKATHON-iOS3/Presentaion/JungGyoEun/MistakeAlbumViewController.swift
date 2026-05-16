@@ -21,49 +21,19 @@ class MistakeAlbumViewController: BaseUIViewController {
     private let lineSpacing: CGFloat = 8
     private let interItemSpacing: CGFloat = 5
     private let inset = UIEdgeInsets(top: 0, left: 9, bottom: 10, right: 9)
-
     
-    private var itemList: [MistakeAlbumListItem] = [
-        MistakeAlbumListItem(
-            mistakeId: 0,
-            imageUrl: "https://koreafuture.co.kr/data/cheditor4/2504/9e64c0509d6db35311252f453fc322c0dfbe1dbc.jpg",
-            date: "2026-05-17",
-            hasReflection: true,
-            emojiIndex: 0
-        ),
-        MistakeAlbumListItem(
-            mistakeId: 1,
-            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJIelZuaKqzGRWq9Hklo8cGNszmqLQJINPCA&s",
-            date: "2026-05-17",
-            hasReflection: false,
-            emojiIndex: nil
-        ),
-        MistakeAlbumListItem(
-            mistakeId: 2,
-            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4OIa79rQk30xxxCZD8qRngJ-U31v1UsBCew&s",
-            date: "2026-05-16",
-            hasReflection: true,
-            emojiIndex: 1
-        ),
-        MistakeAlbumListItem(
-            mistakeId: 3,
-            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ36H2JaDOkKgzd0D3T51irV2jiNNMiQuvAug&s",
-            date: "2026-05-16",
-            hasReflection: false,
-            emojiIndex: nil
-        ),
-        MistakeAlbumListItem(
-            mistakeId: 4,
-            imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2jt1yQV2lJojBuJ7tKeFBFvtUpo_OxmOBWg&s",
-            date: "2026-05-15",
-            hasReflection: true,
-            emojiIndex: 3
-        )
-    ]
+    private let userId: Int = 1
+    private let pageSize: Int = 20
+    
+    private var itemList: [MistakeAlbumListItem] = []
+    private var nextCursor: Int?
+    private var hasNext: Bool = true
+    private var isLoading: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         register()
+        fetchMistakeAlbumData()
     }
     
     override func setStyle() {
@@ -139,6 +109,56 @@ class MistakeAlbumViewController: BaseUIViewController {
             forCellWithReuseIdentifier: MistakeAlbumCollectionViewCell.identifier
         )
     }
+    
+    private func fetchMistakeAlbumData(cursor: Int? = nil) {
+        guard !isLoading else { return }
+        guard cursor == nil || hasNext else { return }
+        
+        isLoading = true
+        
+        MistakeService.shared.getMistakeAlbumData(
+            userId: userId,
+            cursor: cursor,
+            size: pageSize
+        ) { [weak self] result in
+            guard let self else { return }
+            
+            self.isLoading = false
+            
+            switch result {
+            case .success(let data):
+                guard let albumData = data as? MistakeAlbumData else { return }
+                
+                if cursor == nil {
+                    self.itemList = albumData.items
+                } else {
+                    self.itemList.append(contentsOf: albumData.items)
+                }
+                
+                self.nextCursor = albumData.nextCursor
+                self.hasNext = albumData.hasNext
+                self.collectionView.reloadData()
+                
+            case .requestErr(let message):
+                print("⚠️ 요청 오류: \(message)")
+            case .pathErr:
+                print("⚠️ 디코딩 에러 발생")
+            case .serverErr:
+                print("⚠️ 서버 내부 오류")
+            case .networkFail:
+                print("⚠️ 네트워크 연결 상태 확인 요망")
+            }
+        }
+    }
+    
+    private func fetchNextPageIfNeeded(currentIndex: Int) {
+        let thresholdIndex = itemList.count - 5
+        
+        guard currentIndex >= thresholdIndex else { return }
+        guard hasNext, !isLoading, let nextCursor else { return }
+        
+        fetchMistakeAlbumData(cursor: nextCursor)
+    }
 }
 
 extension MistakeAlbumViewController: UICollectionViewDelegateFlowLayout {
@@ -161,7 +181,11 @@ extension MistakeAlbumViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension MistakeAlbumViewController: UICollectionViewDelegate {}
+extension MistakeAlbumViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        fetchNextPageIfNeeded(currentIndex: indexPath.item)
+    }
+}
 
 extension MistakeAlbumViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
