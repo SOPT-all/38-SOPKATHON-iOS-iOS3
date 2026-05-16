@@ -26,7 +26,7 @@ final class CustomButton: UIButton {
     
     override var isEnabled: Bool {
         didSet {
-            alpha = isEnabled ? 1.0 : 0.4
+            updateEnabledStyle()
         }
     }
     
@@ -60,6 +60,8 @@ final class CustomButton: UIButton {
             $0.layer.shadowRadius = 2
             $0.layer.shadowOffset = CGSize(width: 0, height: 0)
         }
+        
+        updateEnabledStyle()
     }
     
     private func setUI() {
@@ -86,5 +88,10 @@ final class CustomButton: UIButton {
     @objc
     private func customButtonDidTap() {
         delegate?.customButtonDidTap(self, type: customButtonType)
+    }
+    
+    private func updateEnabledStyle() {
+        buttonView.backgroundColor = isEnabled ? .gray800 : .gray200
+        buttonLabel.textColor = isEnabled ? .white : .gray600
     }
 }

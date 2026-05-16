@@ -15,6 +15,12 @@ final class MainHeaderCollectionView: UICollectionReusableView {
     static let identifier = "MainHeaderCollectionView"
     
     private var dateList: [DateStrip] = []
+    private var streakCount: Int = 0
+    private let mistakeImages: [UIImage?] = [
+        .imgCheck3,
+        .imgCheck1,
+        .imgCheck2
+    ]
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout().then {
@@ -62,9 +68,19 @@ final class MainHeaderCollectionView: UICollectionReusableView {
         )
     }
     
-    func updateData(with dates: [DateStrip]) {
+    func updateData(with dates: [DateStrip], streakCount: Int) {
         self.dateList = dates
+        self.streakCount = streakCount
         self.collectionView.reloadData()
+    }
+    
+    private func image(for index: Int) -> UIImage? {
+        guard dateList[index].hasMistake else { return .imgCheck4 }
+        
+        let mistakeIndex = dateList[..<index].filter { $0.hasMistake }.count
+        guard mistakeIndex < streakCount else { return .imgCheck4 }
+        
+        return mistakeImages[mistakeIndex % mistakeImages.count]
     }
 }
 
@@ -82,7 +98,11 @@ extension MainHeaderCollectionView: UICollectionViewDataSource, UICollectionView
         
         let data = dateList[indexPath.item]
         
-        cell.bindData(day: data.dayOfWeek, date: data.formattedDate)
+        cell.bindData(
+            day: data.dayOfWeek,
+            date: data.formattedDate,
+            image: image(for: indexPath.item)
+        )
         
         return cell
     }
