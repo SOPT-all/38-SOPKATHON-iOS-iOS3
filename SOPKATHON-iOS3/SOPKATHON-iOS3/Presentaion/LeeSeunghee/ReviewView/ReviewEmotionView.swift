@@ -12,6 +12,11 @@ import Then
 
 final class ReviewEmotionView: BaseUIView {
     
+    // MARK: - Properties
+    
+    private let isEditable: Bool
+    private let reviewText: String?
+    
     // MARK: - Components
     
     private let emotionLabel = UILabel()
@@ -34,6 +39,18 @@ final class ReviewEmotionView: BaseUIView {
     
     private var emotionButtons: [UIButton] {
         [button1, button2, button3, button4]
+    }
+    
+    // MARK: - Initializer
+    
+    init(isEditable: Bool = true, reviewText: String? = nil) {
+        self.isEditable = isEditable
+        self.reviewText = reviewText
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - UI Setting
@@ -81,6 +98,9 @@ final class ReviewEmotionView: BaseUIView {
         reviewTextView.do {
             $0.font = .movie_13
             $0.textColor = .gray
+            $0.text = reviewText
+            $0.isEditable = isEditable
+            $0.isSelectable = isEditable
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
             $0.layer.cornerRadius = 5
@@ -93,6 +113,7 @@ final class ReviewEmotionView: BaseUIView {
             $0.textColor = .gray
             $0.numberOfLines = 0
             $0.isUserInteractionEnabled = false
+            $0.isHidden = !isEditable || !(reviewText?.isEmpty ?? true)
         }
         
     }
@@ -143,6 +164,12 @@ final class ReviewEmotionView: BaseUIView {
     override func setDelegate() {
         // UITextView는 기본 placeholder가 없어서, 입력 여부를 delegate로 감지해 placeholderLabel을 숨긴다.
         reviewTextView.delegate = self
+    }
+    
+    func configureReviewText(_ text: String) {
+        // 서버에서 GET 해온 회고 내용을 조회용/작성용 모두 같은 TextView에 채운다.
+        reviewTextView.text = text
+        reviewPlaceholderLabel.isHidden = true
     }
     
     // MARK: - Action
