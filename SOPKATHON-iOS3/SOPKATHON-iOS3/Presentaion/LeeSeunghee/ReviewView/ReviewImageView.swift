@@ -78,7 +78,7 @@ final class ReviewImageView: BaseUIView {
         
         mistakeDescriptionLabel.do {
             $0.text = mistakeDescription
-            $0.font = .body_r_12
+            $0.font = .movie_13
             $0.textColor = .gray
             $0.numberOfLines = 3
             $0.lineBreakMode = .byWordWrapping
@@ -115,7 +115,7 @@ final class ReviewImageView: BaseUIView {
         }
         
         mistakeTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(dateLabel.snp.bottom).offset(1)
+            $0.top.equalTo(mistakeImageView.snp.bottom).offset(31)
             $0.leading.equalTo(mistakeImageView.snp.leading)
         }
         
