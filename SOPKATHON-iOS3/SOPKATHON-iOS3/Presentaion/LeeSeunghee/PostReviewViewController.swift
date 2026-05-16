@@ -22,13 +22,19 @@ class PostReviewViewController: BaseUIViewController {
     )
     
     private let reviewEmotion = ReviewEmotionView()
+    
+    private let postButton = CustomButton(type: .write)
 
     override func setStyle() {
         view.backgroundColor = .white
+        
+        postButton.do {
+            $0.delegate = self
+        }
     }
 
     override func setUI() {
-        view.addSubviews(reviewHeader, reviewImageView, reviewEmotion)
+        view.addSubviews(reviewHeader, reviewImageView, reviewEmotion, postButton)
     }
 
     override func setLayout() {
@@ -50,6 +56,13 @@ class PostReviewViewController: BaseUIViewController {
             $0.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(20)
             $0.height.equalTo(190)
         }
+        
+        postButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.width.equalTo(355)
+            $0.height.equalTo(44)
+        }
     }
     
     override func setDelegate() {
@@ -61,11 +74,24 @@ class PostReviewViewController: BaseUIViewController {
         let vc = ViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    // 회고뷰 post 시 부를 함수임.. 이거 좀 고쳐야됨 일단 온보딩연결해놧는데 최종적으로는 교은이뷰로 연결해야함 !!!
+    func pushToOnboardingViewController() {
+        let vc = OnboardingViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 extension PostReviewViewController: ReviewHeaderViewDelegate {
     func reviewHeaderViewDidTapBackButton(_ headerView: ReviewHeaderView) {
         // HeaderView에서 전달받은 버튼 탭 이벤트를 실제 화면 이동으로 바꿔준다.
         pushToViewController()
+    }
+}
+
+extension PostReviewViewController: CustomButtonDelegate {
+    func customButtonDidTap(_ button: CustomButton, type: CustomButtonType) {
+        // postButton이 눌리면 온보딩 화면으로 이동한다.
+        pushToOnboardingViewController()
     }
 }
