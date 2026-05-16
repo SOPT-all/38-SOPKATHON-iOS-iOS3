@@ -36,7 +36,6 @@ final class MainViewController: BaseUIViewController {
         
         nextVC.modalPresentationStyle = .overFullScreen
         
-        // animated를 false로 주면 아래에서 위로 올라오지 않고 즉시 등장합니다.
         self.present(nextVC, animated: false, completion: nil)
     }
     
