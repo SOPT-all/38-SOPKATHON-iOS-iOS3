@@ -139,7 +139,7 @@ final class ReviewEmotionView: BaseUIView {
             $0.isEditable = isEditable
             $0.isSelectable = isEditable
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.gray200.cgColor
             $0.layer.cornerRadius = 5
             $0.textContainerInset = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10)
         }
@@ -147,7 +147,7 @@ final class ReviewEmotionView: BaseUIView {
         reviewPlaceholderLabel.do {
             $0.text = "내용을 입력해주세요!"
             $0.font = .movie_13
-            $0.textColor = .gray
+            $0.textColor = .gray500
             $0.numberOfLines = 0
             $0.isUserInteractionEnabled = false
             $0.isHidden = !isEditable || !(reviewText?.isEmpty ?? true)
