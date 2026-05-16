@@ -28,7 +28,9 @@ final class ReviewEmotionView: BaseUIView {
     
     private let reviewLabel = UILabel()
     
-    private let reviewTextField = UITextField()
+    private let reviewTextView = UITextView()
+    
+    private let reviewPlaceholderLabel = UILabel()
     
     private var emotionButtons: [UIButton] {
         [button1, button2, button3, button4]
@@ -76,23 +78,29 @@ final class ReviewEmotionView: BaseUIView {
             $0.textColor = .black
         }
         
-        reviewTextField.do {
-            $0.borderStyle = .roundedRect
-            $0.returnKeyType = .done
-            $0.autocorrectionType = .no
-            $0.autocapitalizationType = .none
-            $0.textColor = .black
-            $0.backgroundColor = .white
-            $0.layer.cornerRadius = 5
+        reviewTextView.do {
+            $0.font = .movie_13
+            $0.textColor = .gray
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.gray.cgColor
-            $0.attributedPlaceholder = NSAttributedString(string: "회고를 작성하세요!", attributes: [ .foregroundColor: UIColor.gray, .font: UIFont.movie_13])
+            $0.layer.cornerRadius = 5
+            $0.textContainerInset = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10)
         }
+        
+        reviewPlaceholderLabel.do {
+            $0.text = "내용을 입력해주세요!"
+            $0.font = .movie_13
+            $0.textColor = .gray
+            $0.numberOfLines = 0
+            $0.isUserInteractionEnabled = false
+        }
+        
     }
 
     override func setUI() {
-        addSubviews(emotionLabel, buttonStack, reviewLabel, reviewTextField)
+        addSubviews(emotionLabel, buttonStack, reviewLabel, reviewTextView)
         buttonStack.addArrangedSubviews(button1, button2, button3, button4)
+        reviewTextView.addSubview(reviewPlaceholderLabel)
         
         // 각 버튼에 액션을 연결해야 터치했을 때 selected 이미지로 바뀐다.
         emotionButtons.enumerated().forEach { index, button in
@@ -114,16 +122,27 @@ final class ReviewEmotionView: BaseUIView {
         }
         
         reviewLabel.snp.makeConstraints {
-            $0.top.equalTo(buttonStack.snp.bottom).offset(24)
+            $0.top.equalTo(buttonStack.snp.bottom).offset(10)
             $0.leading.equalToSuperview().inset(10)
         }
         
-        reviewTextField.snp.makeConstraints {
-            $0.top.equalTo(reviewLabel.snp.bottom)
+        reviewTextView.snp.makeConstraints {
+            $0.top.equalTo(reviewLabel.snp.bottom).offset(10)
             $0.leading.equalToSuperview().inset(10)
             $0.trailing.equalToSuperview().inset(10)
             $0.height.equalTo(67)
         }
+        
+        reviewPlaceholderLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(12)
+            $0.leading.equalToSuperview().inset(14)
+            $0.trailing.equalToSuperview().inset(14)
+        }
+    }
+    
+    override func setDelegate() {
+        // UITextView는 기본 placeholder가 없어서, 입력 여부를 delegate로 감지해 placeholderLabel을 숨긴다.
+        reviewTextView.delegate = self
     }
     
     // MARK: - Action
@@ -136,4 +155,11 @@ final class ReviewEmotionView: BaseUIView {
         }
     }
     
+}
+
+extension ReviewEmotionView: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        // 사용자가 한 글자라도 입력하면 placeholder를 숨기고, 전부 지우면 다시 보여준다.
+        reviewPlaceholderLabel.isHidden = !textView.text.isEmpty
+    }
 }
