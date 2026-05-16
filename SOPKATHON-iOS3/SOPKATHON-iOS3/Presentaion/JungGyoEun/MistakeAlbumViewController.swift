@@ -103,6 +103,10 @@ class MistakeAlbumViewController: BaseUIViewController {
         collectionView.dataSource = self
     }
     
+    override func setAddTarget() {
+        backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
     private func register() {
         collectionView.register(
             MistakeAlbumCollectionViewCell.self,
@@ -158,6 +162,10 @@ class MistakeAlbumViewController: BaseUIViewController {
         guard hasNext, !isLoading, let nextCursor else { return }
         
         fetchMistakeAlbumData(cursor: nextCursor)
+    }
+    
+    @objc private func backButtonDidTap() {
+        navigationController?.popViewController(animated: true)
     }
 }
 

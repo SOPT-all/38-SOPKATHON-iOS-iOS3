@@ -32,11 +32,13 @@ final class MainView: BaseUIView {
         welcomeLabel.do {
             $0.text = "안녕하세요, 렛솝님!"
             $0.font = .body_r_18
+            $0.textColor = .black
         }
         
         subLabel.do {
             $0.text = "오늘은 어떤 아이쿠가 있었나요?"
             $0.font = .caption_r_10
+            $0.textColor = .gray600
         }
         
         serialView.configure(count: 7)
