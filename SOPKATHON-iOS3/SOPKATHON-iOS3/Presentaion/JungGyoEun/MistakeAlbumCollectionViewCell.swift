@@ -50,7 +50,8 @@ final class MistakeAlbumCollectionViewCell: UICollectionViewCell {
         }
         
         stampImageView.do {
-            $0.contentMode = .scaleAspectFit
+            $0.contentMode = .scaleAspectFill
+            $0.clipsToBounds = true
             $0.isHidden = true
         }
     }
