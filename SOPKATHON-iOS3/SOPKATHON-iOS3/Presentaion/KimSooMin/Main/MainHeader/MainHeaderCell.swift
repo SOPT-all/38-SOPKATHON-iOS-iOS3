@@ -31,10 +31,6 @@ final class MainHeaderCell: UICollectionViewCell {
     }
     
     private func setStyle() {
-        imageView.do {
-            $0.image = .imgCheck3
-        }
-        
         dayOfWeekLabel.do {
             $0.font = .body_r_12
             $0.textColor = .black
@@ -70,7 +66,8 @@ final class MainHeaderCell: UICollectionViewCell {
         }
     }
     
-    func bindData(day: String, date: String) {
+    func bindData(day: String, date: String, image: UIImage?) {
+        imageView.image = image
         dayOfWeekLabel.text = day
         dateLabel.text = date
     }

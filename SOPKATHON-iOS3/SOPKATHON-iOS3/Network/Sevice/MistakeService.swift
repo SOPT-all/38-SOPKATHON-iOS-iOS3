@@ -112,6 +112,27 @@ final class MistakeService {
     
     // MARK: - 교은 !!!!!!!!!!!!!!!!!!!!!!!
     
+    func getMistakeAlbumData(
+        userId: Int,
+        cursor: Int?,
+        size: Int?,
+        completion: @escaping (NetworkResult<Any>) -> Void
+    ) {
+        provider.request(.getMistakeList(userId: userId, cursor: cursor, size: size)) { result in
+            switch result {
+            case .success(let response):
+                let statusCode = response.statusCode
+                let data = response.data
+                
+                let networkResult = self.judgeStatus(by: statusCode, data, MistakeAlbumData.self)
+                completion(networkResult)
+                
+            case .failure:
+                completion(.networkFail)
+            }
+        }
+    }
+    
     
     // MARK: - 서버 상태 코드 분기 처리 (공통)
     

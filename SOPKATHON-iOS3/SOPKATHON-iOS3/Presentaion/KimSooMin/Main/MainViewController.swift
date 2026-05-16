@@ -75,7 +75,8 @@ final class MainViewController: BaseUIViewController {
     }
     
     @objc private func secondCardButtonDidTap() {
-        // 두 번째 버튼 액션 처리
+        let nextVC = MistakeAlbumViewController()
+        navigationController?.pushViewController(nextVC, animated: true)
     }
 }
 
@@ -101,8 +102,11 @@ extension MainViewController: UICollectionViewDataSource {
                 for: indexPath
             ) as? MainHeaderCollectionView else { return UICollectionReusableView() }
             
-            if let dates = serverHomeData?.dates {
-                headerView.updateData(with: dates)
+            if let homeData = serverHomeData {
+                headerView.updateData(
+                    with: homeData.dates,
+                    streakCount: homeData.user.streakCount
+                )
             }
             
             return headerView

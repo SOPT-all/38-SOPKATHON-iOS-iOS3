@@ -13,7 +13,7 @@ import Then
 class PostReviewViewController: BaseUIViewController {
     
     private let userId = 1
-    private let mistakeId = 3
+    private let mistakeId: Int
     
     private let reviewHeader = ReviewHeaderView()
     
@@ -27,6 +27,15 @@ class PostReviewViewController: BaseUIViewController {
     private let reviewEmotion = ReviewEmotionView()
     
     private let postButton = CustomButton(type: .post)
+    
+    init(mistakeId: Int) {
+        self.mistakeId = mistakeId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +77,7 @@ class PostReviewViewController: BaseUIViewController {
         
         postButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(40)
+            $0.bottom.equalToSuperview().inset(37)
             $0.width.equalTo(355)
             $0.height.equalTo(44)
         }
@@ -80,11 +89,6 @@ class PostReviewViewController: BaseUIViewController {
         
         // 감정 선택 또는 회고 입력 값이 바뀌면 작성 버튼 활성화 여부를 다시 계산한다.
         reviewEmotion.delegate = self
-    }
-    
-    func pushToViewController() {
-        let vc = ViewController()
-        navigationController?.pushViewController(vc, animated: true)
     }
     
     func pushToMistakeAlbumViewController() {
@@ -161,7 +165,7 @@ class PostReviewViewController: BaseUIViewController {
 extension PostReviewViewController: ReviewHeaderViewDelegate {
     func reviewHeaderViewDidTapBackButton(_ headerView: ReviewHeaderView) {
         // HeaderView에서 전달받은 버튼 탭 이벤트를 실제 화면 이동으로 바꿔준다.
-        pushToViewController()
+        navigationController?.popViewController(animated: true)
     }
 }
 
