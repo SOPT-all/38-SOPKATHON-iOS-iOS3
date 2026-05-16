@@ -59,7 +59,7 @@ extension CustomButtonType {
     var backgroundColor: UIColor {
         switch self {
         case .example: .blue
-        case .onboarding: .gray
+        case .onboarding: .gray900
         case .cancel: .gray200
         case .write: .gray900
         case .post: .black

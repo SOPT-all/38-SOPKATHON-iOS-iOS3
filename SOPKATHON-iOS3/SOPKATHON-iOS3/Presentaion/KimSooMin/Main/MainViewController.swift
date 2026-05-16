@@ -75,8 +75,8 @@ final class MainViewController: BaseUIViewController {
     }
     
     @objc private func secondCardButtonDidTap() {
-        let nextVC = MistakeAlbumViewController()
-        navigationController?.pushViewController(nextVC, animated: true)
+        let vc = MistakeAlbumViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

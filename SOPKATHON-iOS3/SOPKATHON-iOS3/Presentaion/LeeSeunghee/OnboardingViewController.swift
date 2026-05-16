@@ -123,9 +123,7 @@ class OnboardingViewController: BaseUIViewController {
 
 extension OnboardingViewController: CustomButtonDelegate {
     func customButtonDidTap(_ button: CustomButton, type: CustomButtonType) {
-//        let vc = ViewController()
-//        navigationController?.pushViewController(vc, animated: true)
-        
-        //수민이거에 붙이기!!!
+        let vc = MainViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
