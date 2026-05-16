@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Kingfisher
 import SnapKit
 import Then
 
@@ -14,7 +15,7 @@ final class ReviewImageView: BaseUIView {
     
     //MARK: - Properties
     
-    private let mistakeImage: UIImage
+    private let mistakeImage: UIImage?
     
     private let date: String
     
@@ -35,7 +36,7 @@ final class ReviewImageView: BaseUIView {
     private let mistakeDescriptionLabel = UILabel()
     
     //MARK: - Initializer
-    init(mistakeImage: UIImage, date: String, mistakeTitle: String, mistakeDescription: String) {
+    init(mistakeImage: UIImage?, date: String, mistakeTitle: String, mistakeDescription: String) {
         self.mistakeImage = mistakeImage
         self.date = date
         self.mistakeTitle = mistakeTitle
@@ -60,6 +61,7 @@ final class ReviewImageView: BaseUIView {
         
         mistakeImageView.do {
             $0.image = mistakeImage
+            $0.contentMode = .scaleAspectFill
             $0.layer.cornerRadius = 12
             $0.clipsToBounds = true
         }
@@ -124,5 +126,14 @@ final class ReviewImageView: BaseUIView {
             $0.horizontalEdges.equalTo(mistakeImageView.snp.horizontalEdges)
             $0.bottom.equalToSuperview().inset(20)
         }
+    }
+    
+    func configure(imageUrl: String, date: String, title: String, content: String) {
+        if let url = URL(string: imageUrl) {
+            mistakeImageView.kf.setImage(with: url)
+        }
+        dateLabel.text = date
+        mistakeTitleLabel.text = title
+        mistakeDescriptionLabel.text = content
     }
 }

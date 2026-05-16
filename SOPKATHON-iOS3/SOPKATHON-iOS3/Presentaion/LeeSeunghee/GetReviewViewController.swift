@@ -1,5 +1,5 @@
 //
-//  ReviewView.swift
+//  GetReviewViewController.swift
 //  SOPKATHON-iOS3
 //
 //  Created by 초긍정행운의포춘쿠키 on 5/17/26.
@@ -10,10 +10,10 @@ import UIKit
 import SnapKit
 import Then
 
-class PostReviewViewController: BaseUIViewController {
+class GetReviewViewController: BaseUIViewController {
     
     private let userId = 1
-    private let mistakeId = 3
+    private let mistakeId = 1
     
     private let reviewHeader = ReviewHeaderView()
     
@@ -24,9 +24,10 @@ class PostReviewViewController: BaseUIViewController {
         mistakeDescription: ""
     )
     
-    private let reviewEmotion = ReviewEmotionView()
-    
-    private let postButton = CustomButton(type: .post)
+    private let reviewEmotion = ReviewEmotionView(
+        isEditable: false,
+        reviewText: nil
+    )
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,15 +36,10 @@ class PostReviewViewController: BaseUIViewController {
 
     override func setStyle() {
         view.backgroundColor = .white
-        
-        postButton.do {
-            $0.delegate = self
-            $0.isEnabled = false
-        }
     }
 
     override func setUI() {
-        view.addSubviews(reviewHeader, reviewImageView, reviewEmotion, postButton)
+        view.addSubviews(reviewHeader, reviewImageView, reviewEmotion)
     }
 
     override func setLayout() {
@@ -65,21 +61,11 @@ class PostReviewViewController: BaseUIViewController {
             $0.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(20)
             $0.height.equalTo(190)
         }
-        
-        postButton.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(40)
-            $0.width.equalTo(355)
-            $0.height.equalTo(44)
-        }
     }
     
     override func setDelegate() {
-        // ReviewHeaderView 안의 버튼이 눌렸을 때 PostReviewViewController가 이벤트를 받도록 연결한다.
+        // ReviewHeaderView 안의 backButton이 눌렸을 때 GetReviewViewController가 이벤트를 받도록 연결한다.
         reviewHeader.delegate = self
-        
-        // 감정 선택 또는 회고 입력 값이 바뀌면 작성 버튼 활성화 여부를 다시 계산한다.
-        reviewEmotion.delegate = self
     }
     
     func pushToViewController() {
@@ -87,15 +73,9 @@ class PostReviewViewController: BaseUIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func pushToMistakeAlbumViewController() {
-        let vc = MistakeAlbumViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    private func updatePostButtonState() {
-        let hasSelectedEmoji = reviewEmotion.selectedEmojiIndexForRequest != nil
-        let hasContent = !reviewEmotion.content.isEmpty
-        postButton.isEnabled = hasSelectedEmoji && hasContent
+    func configureReviewText(_ text: String) {
+        // 나중에 서버 GET 성공 시 이 함수에 응답 값을 넣으면 reviewTextView에 표시된다.
+        reviewEmotion.configureReviewText(text)
     }
     
     private func getMistakeDetail() {
@@ -125,54 +105,22 @@ class PostReviewViewController: BaseUIViewController {
             title: data.title,
             content: data.content
         )
-    }
-    
-    private func postReview() {
-        guard let emojiIndex = reviewEmotion.selectedEmojiIndexForRequest else { return }
         
-        let request = PostReviewRequest(
-            emojiIndex: emojiIndex,
-            content: reviewEmotion.content
-        )
-        
-        PostReviewService.shared.postReview(
-            userId: userId,
-            mistakeId: mistakeId,
-            request: request
-        ) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success:
-                    self?.pushToMistakeAlbumViewController()
-                case .requestErr(let message):
-                    print("회고 작성 요청 실패: \(message)")
-                case .pathErr:
-                    print("회고 작성 디코딩 실패")
-                case .serverErr:
-                    print("회고 작성 서버 에러")
-                case .networkFail:
-                    print("회고 작성 네트워크 실패")
-                }
-            }
+        if let reflection = data.reflection {
+            print("GET reflection emojiIndex:", reflection.emojiIndex)
+            reviewEmotion.configureReflection(
+                content: reflection.content,
+                emojiIndex: reflection.emojiIndex
+            )
+        } else {
+            print("GET reflection is nil")
         }
     }
 }
 
-extension PostReviewViewController: ReviewHeaderViewDelegate {
+extension GetReviewViewController: ReviewHeaderViewDelegate {
     func reviewHeaderViewDidTapBackButton(_ headerView: ReviewHeaderView) {
         // HeaderView에서 전달받은 버튼 탭 이벤트를 실제 화면 이동으로 바꿔준다.
         pushToViewController()
-    }
-}
-
-extension PostReviewViewController: CustomButtonDelegate {
-    func customButtonDidTap(_ button: CustomButton, type: CustomButtonType) {
-        postReview()
-    }
-}
-
-extension PostReviewViewController: ReviewEmotionViewDelegate {
-    func reviewEmotionViewDidChangeInput(_ reviewEmotionView: ReviewEmotionView) {
-        updatePostButtonState()
     }
 }
