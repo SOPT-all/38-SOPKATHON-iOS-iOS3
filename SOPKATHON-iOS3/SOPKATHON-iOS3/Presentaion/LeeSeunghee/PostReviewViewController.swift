@@ -20,13 +20,15 @@ class PostReviewViewController: BaseUIViewController {
         mistakeTitle: "오늘의 엣큥",
         mistakeDescription: "이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 "
     )
+    
+    private let reviewEmotion = ReviewEmotionView()
 
     override func setStyle() {
         view.backgroundColor = .white
     }
 
     override func setUI() {
-        view.addSubviews(reviewHeader, reviewImageView)
+        view.addSubviews(reviewHeader, reviewImageView, reviewEmotion)
     }
 
     override func setLayout() {
@@ -40,6 +42,13 @@ class PostReviewViewController: BaseUIViewController {
             $0.top.equalTo(reviewHeader.snp.bottom).offset(18)
             $0.horizontalEdges.equalToSuperview().inset(10)
             $0.height.equalTo(380)
+        }
+        
+        reviewEmotion.snp.makeConstraints {
+            $0.top.equalTo(reviewImageView.snp.bottom).offset(10)
+            $0.horizontalEdges.equalToSuperview().inset(10)
+            $0.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide).inset(20)
+            $0.height.equalTo(190)
         }
     }
     
