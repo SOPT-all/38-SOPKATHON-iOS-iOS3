@@ -16,7 +16,7 @@ extension CustomButtonType {
     var title: String {
         switch self {
         case .example: "예시 버튼"
-        case .onboarding: "작성하러가기"
+        case .onboarding: "나의 아이쿠 기록 작성하기"
         }
     }
     
@@ -37,14 +37,14 @@ extension CustomButtonType {
     var fontColor: UIColor {
         switch self {
         case .example: .black
-        case .onboarding: .black
+        case .onboarding: .white
         }
     }
     
     var backgroundColor: UIColor {
         switch self {
         case .example: .blue
-        case .onboarding: .blue
+        case .onboarding: .gray
         }
     }
 }
