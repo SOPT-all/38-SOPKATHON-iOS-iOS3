@@ -69,19 +69,19 @@ final class ReviewImageView: BaseUIView {
         dateLabel.do {
             $0.text = date
             $0.font = .body_r_12
-            $0.textColor = .gray
+            $0.textColor = .gray600
         }
         
         mistakeTitleLabel.do {
             $0.text = mistakeTitle
             $0.font = .title_sb_16
-            $0.textColor = .black
+            $0.textColor = .gray900
         }
         
         mistakeDescriptionLabel.do {
             $0.text = mistakeDescription
             $0.font = .movie_13
-            $0.textColor = .gray
+            $0.textColor = .gray800
             $0.numberOfLines = 3
             $0.lineBreakMode = .byWordWrapping
         }
@@ -114,17 +114,18 @@ final class ReviewImageView: BaseUIView {
         dateLabel.snp.makeConstraints {
             $0.top.equalTo(mistakeImageView.snp.bottom).offset(12)
             $0.leading.equalTo(mistakeImageView.snp.leading)
+            $0.height.equalTo(18)
         }
         
         mistakeTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(mistakeImageView.snp.bottom).offset(31)
+            $0.top.equalTo(dateLabel.snp.bottom).offset(1)
             $0.leading.equalTo(mistakeImageView.snp.leading)
         }
         
         mistakeDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(mistakeTitleLabel.snp.bottom).offset(4)
             $0.horizontalEdges.equalTo(mistakeImageView.snp.horizontalEdges)
-            $0.bottom.equalToSuperview().inset(20)
+//            $0.bottom.equalToSuperview().inset(20)
         }
     }
     
