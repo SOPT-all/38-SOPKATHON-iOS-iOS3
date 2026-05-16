@@ -30,13 +30,16 @@ final class MainViewController: BaseUIViewController {
         mainView.firstCardButton.addTarget(self, action: #selector(firstCardButtonDidTap), for: .touchUpInside)
         mainView.secondCardButton.addTarget(self, action: #selector(secondCardButtonDidTap), for: .touchUpInside)
     }
-
+    
     @objc private func firstCardButtonDidTap() {
-        // 이거 하긔
-        // let nextVC = WriteMistakeViewController()
-        // self.navigationController?.pushViewController(nextVC, animated: true)
+        let nextVC = WriteMistakeViewController()
+        
+        nextVC.modalPresentationStyle = .overFullScreen
+        
+        // animated를 false로 주면 아래에서 위로 올라오지 않고 즉시 등장합니다.
+        self.present(nextVC, animated: false, completion: nil)
     }
-
+    
     @objc private func secondCardButtonDidTap() {
         // 두 번째 버튼 눌렸을 때 로직 구현
     }

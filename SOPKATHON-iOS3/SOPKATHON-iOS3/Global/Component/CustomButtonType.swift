@@ -10,6 +10,8 @@ import UIKit
 enum CustomButtonType: CaseIterable {
     case example
     case onboarding
+    case cancel
+    case write
 }
 
 extension CustomButtonType {
@@ -17,6 +19,8 @@ extension CustomButtonType {
         switch self {
         case .example: "예시 버튼"
         case .onboarding: "나의 아이쿠 기록 작성하기"
+        case .cancel: "취소"
+        case .write: "작성하기"
         }
     }
     
@@ -24,6 +28,8 @@ extension CustomButtonType {
         switch self {
         case .example: 355
         case .onboarding: 355
+        case .cancel: 160
+        case .write: 160
         }
     }
     
@@ -31,6 +37,8 @@ extension CustomButtonType {
         switch self {
         case .example: 44
         case .onboarding: 44
+        case .cancel: 44
+        case .write: 44
         }
     }
     
@@ -38,6 +46,8 @@ extension CustomButtonType {
         switch self {
         case .example: .black
         case .onboarding: .white
+        case .cancel: . gray
+        case .write: .white
         }
     }
     
@@ -45,6 +55,8 @@ extension CustomButtonType {
         switch self {
         case .example: .blue
         case .onboarding: .gray
+        case .cancel: .lightGray
+        case .write: .black
         }
     }
 }
