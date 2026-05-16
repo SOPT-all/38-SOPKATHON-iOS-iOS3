@@ -12,24 +12,33 @@ import Then
 
 class PostReviewViewController: BaseUIViewController {
     
+    private let userId = 1
+    private let mistakeId = 3
+    
     private let reviewHeader = ReviewHeaderView()
     
     private let reviewImageView = ReviewImageView(
-        mistakeImage: .btnBack,
-        date: "26.04.13",
-        mistakeTitle: "오늘의 엣큥",
-        mistakeDescription: "이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 "
+        mistakeImage: nil,
+        date: "",
+        mistakeTitle: "",
+        mistakeDescription: ""
     )
     
     private let reviewEmotion = ReviewEmotionView()
     
-    private let postButton = CustomButton(type: .write)
+    private let postButton = CustomButton(type: .post)
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        getMistakeDetail()
+    }
 
     override func setStyle() {
         view.backgroundColor = .white
         
         postButton.do {
             $0.delegate = self
+            $0.isEnabled = false
         }
     }
 
@@ -68,6 +77,9 @@ class PostReviewViewController: BaseUIViewController {
     override func setDelegate() {
         // ReviewHeaderView 안의 버튼이 눌렸을 때 PostReviewViewController가 이벤트를 받도록 연결한다.
         reviewHeader.delegate = self
+        
+        // 감정 선택 또는 회고 입력 값이 바뀌면 작성 버튼 활성화 여부를 다시 계산한다.
+        reviewEmotion.delegate = self
     }
     
     func pushToViewController() {
@@ -75,10 +87,74 @@ class PostReviewViewController: BaseUIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    // 회고뷰 post 시 부를 함수임.. 이거 좀 고쳐야됨 일단 온보딩연결해놧는데 최종적으로는 교은이뷰로 연결해야함 !!!
-    func pushToOnboardingViewController() {
-        let vc = OnboardingViewController()
+    func pushToMistakeAlbumViewController() {
+        let vc = MistakeAlbumViewController()
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func updatePostButtonState() {
+        let hasSelectedEmoji = reviewEmotion.selectedEmojiIndexForRequest != nil
+        let hasContent = !reviewEmotion.content.isEmpty
+        postButton.isEnabled = hasSelectedEmoji && hasContent
+    }
+    
+    private func getMistakeDetail() {
+        GetReviewService.shared.getReview(userId: userId, mistakeId: mistakeId) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    guard let reviewData = data as? GetReviewResponse else { return }
+                    self?.configureMistakeDetail(reviewData)
+                case .requestErr(let message):
+                    print("실수 상세 조회 요청 실패: \(message)")
+                case .pathErr:
+                    print("실수 상세 조회 디코딩 실패")
+                case .serverErr:
+                    print("실수 상세 조회 서버 에러")
+                case .networkFail:
+                    print("실수 상세 조회 네트워크 실패")
+                }
+            }
+        }
+    }
+    
+    private func configureMistakeDetail(_ data: GetReviewResponse) {
+        reviewImageView.configure(
+            imageUrl: data.imageUrl,
+            date: data.date,
+            title: data.title,
+            content: data.content
+        )
+    }
+    
+    private func postReview() {
+        guard let emojiIndex = reviewEmotion.selectedEmojiIndexForRequest else { return }
+        
+        let request = PostReviewRequest(
+            emojiIndex: emojiIndex,
+            content: reviewEmotion.content
+        )
+        
+        PostReviewService.shared.postReview(
+            userId: userId,
+            mistakeId: mistakeId,
+            request: request
+        ) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success:
+                    self?.pushToMistakeAlbumViewController()
+                case .requestErr(let message):
+                    print("회고 작성 요청 실패: \(message)")
+                case .pathErr:
+                    print("회고 작성 디코딩 실패")
+                case .serverErr:
+                    print("회고 작성 서버 에러")
+                case .networkFail:
+                    print("회고 작성 네트워크 실패")
+                }
+            }
+        }
     }
 }
 
@@ -91,7 +167,12 @@ extension PostReviewViewController: ReviewHeaderViewDelegate {
 
 extension PostReviewViewController: CustomButtonDelegate {
     func customButtonDidTap(_ button: CustomButton, type: CustomButtonType) {
-        // postButton이 눌리면 온보딩 화면으로 이동한다.
-        pushToOnboardingViewController()
+        postReview()
+    }
+}
+
+extension PostReviewViewController: ReviewEmotionViewDelegate {
+    func reviewEmotionViewDidChangeInput(_ reviewEmotionView: ReviewEmotionView) {
+        updatePostButtonState()
     }
 }

@@ -24,6 +24,12 @@ final class CustomButton: UIButton {
     private let buttonLabel = UILabel()
     private let buttonView = UIView()
     
+    override var isEnabled: Bool {
+        didSet {
+            alpha = isEnabled ? 1.0 : 0.4
+        }
+    }
+    
     init(type: CustomButtonType) {
         self.customButtonType = type
         super.init(frame: .zero)

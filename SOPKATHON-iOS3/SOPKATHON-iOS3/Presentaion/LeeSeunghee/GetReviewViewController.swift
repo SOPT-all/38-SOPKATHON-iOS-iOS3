@@ -12,20 +12,27 @@ import Then
 
 class GetReviewViewController: BaseUIViewController {
     
+    private let userId = 1
+    private let mistakeId = 1
+    
     private let reviewHeader = ReviewHeaderView()
     
     private let reviewImageView = ReviewImageView(
-        mistakeImage: .btnBack,
-        date: "26.04.13",
-        mistakeTitle: "오늘의 엣큥",
-        mistakeDescription: "이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 이나연 사랑해 "
+        mistakeImage: nil,
+        date: "",
+        mistakeTitle: "",
+        mistakeDescription: ""
     )
     
     private let reviewEmotion = ReviewEmotionView(
         isEditable: false,
-        reviewText: "서버에서 GET 해온 회고 내용이 여기에 들어갈 예정입니다." //데이터 여기 연결
+        reviewText: nil
     )
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        getMistakeDetail()
+    }
 
     override func setStyle() {
         view.backgroundColor = .white
@@ -69,6 +76,45 @@ class GetReviewViewController: BaseUIViewController {
     func configureReviewText(_ text: String) {
         // 나중에 서버 GET 성공 시 이 함수에 응답 값을 넣으면 reviewTextView에 표시된다.
         reviewEmotion.configureReviewText(text)
+    }
+    
+    private func getMistakeDetail() {
+        GetReviewService.shared.getReview(userId: userId, mistakeId: mistakeId) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    guard let reviewData = data as? GetReviewResponse else { return }
+                    self?.configureMistakeDetail(reviewData)
+                case .requestErr(let message):
+                    print("실수 상세 조회 요청 실패: \(message)")
+                case .pathErr:
+                    print("실수 상세 조회 디코딩 실패")
+                case .serverErr:
+                    print("실수 상세 조회 서버 에러")
+                case .networkFail:
+                    print("실수 상세 조회 네트워크 실패")
+                }
+            }
+        }
+    }
+    
+    private func configureMistakeDetail(_ data: GetReviewResponse) {
+        reviewImageView.configure(
+            imageUrl: data.imageUrl,
+            date: data.date,
+            title: data.title,
+            content: data.content
+        )
+        
+        if let reflection = data.reflection {
+            print("GET reflection emojiIndex:", reflection.emojiIndex)
+            reviewEmotion.configureReflection(
+                content: reflection.content,
+                emojiIndex: reflection.emojiIndex
+            )
+        } else {
+            print("GET reflection is nil")
+        }
     }
 }
 
