@@ -56,12 +56,12 @@ final class WriteMistakeView: BaseUIView {
         
         contentView.do {
             $0.backgroundColor = .white
-            $0.layer.cornerRadius = 20
+            $0.layer.cornerRadius = 12
         }
         
         photoContainerView.do {
-            $0.backgroundColor = .lightGray
-            $0.layer.cornerRadius = 15
+            $0.backgroundColor = .gray200
+            $0.layer.cornerRadius = 12
         }
         
         cameraIconImageView.do {
@@ -71,21 +71,21 @@ final class WriteMistakeView: BaseUIView {
         addPhotoLabel.do {
             $0.text = "사진 추가하기"
             $0.font = .title_sb_18
-            $0.textColor = .gray
+            $0.textColor = .gray500
         }
         
         titleHeaderLabel.do {
             $0.text = "제목"
             $0.font = .title_sb_16
-            $0.textColor = .gray
+            $0.textColor = .gray700
         }
         
         titleTextField.do {
             $0.placeholder = "제목을 입력해주세요!"
             $0.font = .title_sb_16
-            $0.textColor = .gray
+            $0.textColor = .gray500
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.gray200.cgColor
             $0.layer.cornerRadius = 5
             $0.addLeftPadding(14)
             $0.leftViewMode = .always
@@ -94,14 +94,14 @@ final class WriteMistakeView: BaseUIView {
         contentHeaderLabel.do {
             $0.text = "내용"
             $0.font = .title_sb_16
-            $0.textColor = .gray
+            $0.textColor = .gray700
         }
         
         contentTextView.do {
             $0.font = .movie_13
-            $0.textColor = .gray
+            $0.textColor = .gray500
             $0.layer.borderWidth = 1
-            $0.layer.borderColor = UIColor.gray.cgColor
+            $0.layer.borderColor = UIColor.gray200.cgColor
             $0.layer.cornerRadius = 5
             $0.textContainerInset = UIEdgeInsets(top: 12, left: 10, bottom: 12, right: 10)
         }
@@ -192,6 +192,7 @@ final class WriteMistakeView: BaseUIView {
         contentTextView.delegate = self
         cancelButton.delegate = self
         writeButton.delegate = self
+        titleTextField.delegate = self
     }
     
     func setAddTarget() {
@@ -228,6 +229,18 @@ extension WriteMistakeView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         contentPlaceholderLabel.isHidden = !textView.text.isEmpty
     }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        UIView.animate(withDuration: 0.2) {
+            textView.layer.borderColor = UIColor.gray900.cgColor
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        UIView.animate(withDuration: 0.2) {
+            textView.layer.borderColor = UIColor.gray200.cgColor
+        }
+    }
 }
 
 // MARK: - CustomButtonDelegate (버튼 액션 수신 및 VC로 전달)
@@ -245,6 +258,23 @@ extension WriteMistakeView: CustomButtonDelegate {
             
         default:
             break
+        }
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension WriteMistakeView: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.1) {
+            textField.layer.borderColor = UIColor.gray900.cgColor
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.1) {
+            textField.layer.borderColor = UIColor.gray200.cgColor
         }
     }
 }
