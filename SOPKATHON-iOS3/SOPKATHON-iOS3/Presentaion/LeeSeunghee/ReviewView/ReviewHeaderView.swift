@@ -10,7 +10,15 @@ import UIKit
 import SnapKit
 import Then
 
+protocol ReviewHeaderViewDelegate: AnyObject {
+    func reviewHeaderViewDidTapBackButton(_ headerView: ReviewHeaderView)
+}
+
 final class ReviewHeaderView: BaseUIView {
+    
+    // MARK: - Properties
+    
+    weak var delegate: ReviewHeaderViewDelegate?
     
     // MARK: - Components
     
@@ -34,6 +42,9 @@ final class ReviewHeaderView: BaseUIView {
     
     override func setUI() {
         addSubviews(headerLabel, backButton)
+        
+        // HeaderView는 화면 전환을 직접 하지 않고, 버튼 탭 이벤트만 VC에게 전달한다.
+        backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
     }
     
     override func setLayout() {
@@ -47,5 +58,13 @@ final class ReviewHeaderView: BaseUIView {
             $0.centerY.equalToSuperview()
             $0.size.equalTo(40)
         }
+    }
+    
+    // MARK: - Action
+    
+    @objc
+    private func backButtonDidTap() {
+        // navigationController는 ViewController가 가지고 있으므로 실제 push는 VC에서 처리한다.
+        delegate?.reviewHeaderViewDidTapBackButton(self)
     }
 }
