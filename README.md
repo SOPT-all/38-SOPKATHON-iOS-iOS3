@@ -104,7 +104,9 @@ SOPKATHON-iOS3
 ```
 
 ## 시연 영상 📼
-<img src="" width="300" alt="">
+<img width="300" alt="Simulator Screen Recording - iPhone 13 mini - 2026-05-17 at 08 53 48" src="https://github.com/user-attachments/assets/6270986a-2085-4017-bc7c-90a78307d292" />
+<img width="300" alt="Simulator Screen Recording - iPhone 13 mini - 2026-05-17 at 08 52 47" src="https://github.com/user-attachments/assets/bcf635e4-e7bb-42cb-80ad-e03bcbb5e2a6" />
+
 
 ## Photos 🤳🏿
 
